@@ -11,25 +11,38 @@ public class SnakeScript : MonoBehaviour
     private List<Transform> segmentsSnake;
     public Transform snakePrefab;
     private bool endGame;
-    //private GameManagerScript gameManager;
-    //private SnakeScript snakeScript;
     #endregion
     private void Awake()
     {
+        #region Init Snake
         endGame = false;
         segmentsSnake = new List<Transform>();
         segmentsSnake.Add(this.transform);
+        if (_direction.x == 1f)
+        {
+            Quaternion rotationRight = Quaternion.Euler(0f, 0f, 90f);
+            transform.rotation = rotationRight;
+        }
+        else if (_direction.x == -1f)
+        {
+            Quaternion rotationLeft = Quaternion.Euler(0f, 0f, 270f);
+            transform.rotation = rotationLeft;
+        }
+        if(_direction.y == 1f)
+        {
+            Quaternion rotationUp = Quaternion.Euler(0f, 0f, 180f);
+            transform.rotation = rotationUp;
+        }
+        else if( _direction.y == -1f)
+        {
+            Quaternion rotationDown = Quaternion.Euler(0f, 0f, 0f);
+            transform.rotation = rotationDown;
+        }
+        #endregion
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        #region snake movement
+        #region Snake Movement
         if (!endGame)
         {
             if (_direction.x != 0f)
@@ -37,10 +50,14 @@ public class SnakeScript : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
                 {
                     _input = Vector2.up;
+                    Quaternion rotationUp = Quaternion.Euler(0f, 0f, 180f);
+                    transform.rotation = rotationUp;
                 }
                 else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     _input = Vector2.down;
+                    Quaternion rotationDown = Quaternion.Euler(0f, 0f, 0f);
+                    transform.rotation = rotationDown;
                 }
             }
             else if (_direction.y != 0f)
@@ -48,10 +65,14 @@ public class SnakeScript : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
                 {
                     _input = Vector2.left;
+                    Quaternion rotationLeft = Quaternion.Euler(0f, 0f, 270f);
+                    transform.rotation = rotationLeft;
                 }
                 else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 {
                     _input = Vector2.right;
+                    Quaternion rotationRight = Quaternion.Euler(0f, 0f, 90f);
+                    transform.rotation = rotationRight;
                 }
             }
         }
@@ -59,6 +80,7 @@ public class SnakeScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        #region Snake Segments
         if (!endGame)
         {
             if (_input != Vector2.zero)
@@ -75,6 +97,7 @@ public class SnakeScript : MonoBehaviour
                 0.0f
             );
         }
+        #endregion
     }
     private void GrowSnake()
     {
@@ -84,7 +107,8 @@ public class SnakeScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Food")
+        #region Collision Types
+        if (collision.tag == "Food")
         {
             GameManagerScript.instance.IncreaseScore();
             GrowSnake();
@@ -98,10 +122,12 @@ public class SnakeScript : MonoBehaviour
         {
             TraverseDirection(collision.transform);
         }
+        #endregion
     }
 
     private void TraverseDirection(Transform wall)
     {
+        #region Traverse Any Direction
         Vector3 position = transform.position;
         if (_direction.x != 0f)
         {
@@ -112,5 +138,17 @@ public class SnakeScript : MonoBehaviour
             position.y = Mathf.RoundToInt(-wall.position.y+_direction.y);
         }
         transform.position = position;
+        #endregion
+    }
+    public bool OccupyPosition(int x, int y)
+    {
+        foreach (Transform segment in segmentsSnake)
+        {
+            if(Mathf.RoundToInt(segment.position.x) == x && Mathf.RoundToInt(segment.position.y) == y)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

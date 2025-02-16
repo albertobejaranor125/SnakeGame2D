@@ -15,7 +15,8 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        if(instance == null)
+        #region Create Instance and Load Max Score possible
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
@@ -27,23 +28,12 @@ public class GameManagerScript : MonoBehaviour
         LoadScoreSnakeJSON();
         scoreSnake = 0;
         scoreText.text = "Score: " + scoreSnake.ToString();
+        #endregion
     }
-    
-    void Start()
-    {
-        
-    }
-
     private void LoadScoreSnakeJSON()
     {
         highScoreSnake = SaveManagerScript.LoadHighScoreSnakeJSON();
         highScoreText.text = "High Score: " + highScoreSnake.ToString();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     public void IncreaseScore()
     {
@@ -58,16 +48,17 @@ public class GameManagerScript : MonoBehaviour
             highScoreText.text = "High Score: " + scoreSnake.ToString();
         }
     }
-
     private bool CheckHighScore()
     {
-        if(scoreSnake > highScoreSnake)
+        #region Checks Score is more higher than High Score
+        if (scoreSnake > highScoreSnake)
         {
             highScoreSnake = scoreSnake;
             SaveHighScoreSnakeJSON();
             return true;
         }
         return false;
+        #endregion
     }
     private void SaveHighScoreSnakeJSON()
     {

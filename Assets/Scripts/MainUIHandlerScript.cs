@@ -12,17 +12,10 @@ public class MainUIHandlerScript : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject controlsMenu;
-    // Start is called before the first frame update
     void Start()
     {
         mainMenu.SetActive(true);
         controlsMenu.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     public void PlayGame()
     {

@@ -6,7 +6,11 @@ public class FoodManagerScript : MonoBehaviour
 {
     public BoxCollider2D gridArea;
     public List<Sprite> spritesFood;
-    // Start is called before the first frame update
+    private SnakeScript snakeScript;
+    private void Awake()
+    {
+        snakeScript = FindObjectOfType<SnakeScript>();
+    }
     void Start()
     {
         InstantiateFoodRandom();
@@ -17,14 +21,24 @@ public class FoodManagerScript : MonoBehaviour
         Bounds bounds = this.gridArea.bounds;
         float x = Random.Range(bounds.min.x, bounds.max.x);
         float y = Random.Range(bounds.min.y, bounds.max.y);
-        this.transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y), 0);
+        int xInt = Mathf.RoundToInt(x);
+        int yInt = Mathf.RoundToInt(y);
+        while (snakeScript.OccupyPosition(xInt, yInt))
+        {
+            xInt++;
+            if (xInt > bounds.max.x)
+            {
+                xInt = Mathf.RoundToInt(bounds.min.x);
+                yInt++;
+                if(yInt > bounds.max.y)
+                {
+                    yInt = Mathf.RoundToInt(bounds.min.y);
+                }
+            }
+        }
+        this.transform.position = new Vector3(xInt, yInt, 0);
         GetComponent<SpriteRenderer>().sprite = spritesFood[Random.Range(0, spritesFood.Count)];
         #endregion
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
