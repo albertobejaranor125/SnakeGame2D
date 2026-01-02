@@ -1,7 +1,14 @@
 # SnakeGame
-It's a 2D game which is based on Snake Zigurous Project Tutorial with my own changes.
+It's a 2D game based on Snake Zigurous Project Tutorial with my own modifications.
 
 Snake Zigurous Project Tutorial is open source.
+
+# Gameplay Overview
+The player needs to eat food to grow the snake. For each piece of food eaten, the game awards points.
+
+# Controls
+- **WASD** - Move
+- **Esc** - Pause Game
 
 # References:
 https://www.youtube.com/watch?v=U8gUnpeaMbQ
